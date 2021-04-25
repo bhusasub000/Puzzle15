@@ -23,8 +23,8 @@ public class JavaFXTemplate extends Application {
 	BorderPane puzzlePane; // main scene for our puzzle
 	GridPane gridpane; // this should be where the tiles go
 	MenuBar menuBar;
-	Menu menuGamePlay, menuOptions;
-	MenuItem exit, newPuzzle, solve1, solve2, showSolution;
+	Menu menuGamePlay, menuOptions, howTo;
+	MenuItem exit, newPuzzle, solve1, solve2, showSolution, instr;
 	Button enter;
 	Label howToPlay, moveString, moveNumber;
 	int numberOfMoves = 0;
@@ -44,7 +44,7 @@ public class JavaFXTemplate extends Application {
 		solve1 = new MenuItem("Solve 1");
 		solve2 = new MenuItem("Solve 2");
 		showSolution = new MenuItem("Show Solution");
-		
+		instr = new MenuItem("How To Play");
 		checkPosition = new EventHandler<ActionEvent>() {
 			
 			public void handle(ActionEvent event) {
@@ -102,11 +102,11 @@ public class JavaFXTemplate extends Application {
 	public void setMenuOptions () {
 		menuGamePlay = new Menu( "Game Play");
 		menuOptions = new Menu ("Options");
-		
+		howTo = new Menu ("Instructions");
 		menuOptions.getItems().addAll(newPuzzle, exit);
 		menuGamePlay.getItems().addAll(solve1, solve2, showSolution);
-		
-		menuBar.getMenus().addAll(menuGamePlay, menuOptions);
+		howTo.getItems().addAll(instr);
+		menuBar.getMenus().addAll(menuGamePlay, menuOptions, howTo);
 		
 	}
 	
