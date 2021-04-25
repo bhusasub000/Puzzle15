@@ -13,7 +13,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class JavaFXTemplate extends Application {
-	String puzzle1 = "2 6 10 3 1 4 7 11 8 5 9 15 12 13 14 0";
+	int[][] puzzle1 = {{2, 6, 10, 3}, {1, 4, 7, 11}, {8, 5, 9, 15}, {12, 13, 14, 0}};
+	int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
 	Tiles[][] puzzle = new Tiles[4][4];
 	
 	EventHandler<ActionEvent> checkPosition; // to know the which tile was clicked
@@ -132,15 +133,13 @@ public class JavaFXTemplate extends Application {
 	}
 	// we need to have either another function to intialize the values in the buttons or do with a parameter on newPuzzle()
 	void newPuzzle(GridPane gridPane) {
-		int counter = 0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				Tiles t = new Tiles(i,j, counter); // zero should be the number of that puzzle tile
+				Tiles t = new Tiles(i,j, puzzle2[i][j]); // zero should be the number of that puzzle tile
 				t.setMinSize(100, 100);
 				t.setOnAction(checkPosition);
 				puzzle[i][j] = t;
 				gridPane.add(puzzle[i][j], j, i);
-				counter++;
 			}
 		}
 		
