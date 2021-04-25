@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -25,7 +26,8 @@ public class JavaFXTemplate extends Application {
 	Menu menuGamePlay, menuOptions;
 	MenuItem exit, newPuzzle, solve1, solve2, showSolution;
 	Button enter;
-	Label puzzleString;
+	Label howToPlay, moveString, moveNumber;
+	int numberOfMoves = 0;
 	TextField userInput;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -43,7 +45,17 @@ public class JavaFXTemplate extends Application {
 		solve2 = new MenuItem("Solve 2");
 		showSolution = new MenuItem("Show Solution");
 		
-		
+		checkPosition = new EventHandler<ActionEvent>() {
+			
+			public void handle(ActionEvent event) {
+				Tiles tile = (Tiles)event.getSource();
+				int row = tile.getRow();
+				int column = tile.getColumn();
+				
+				
+			}
+
+		};
 		
 		// first we should intialized our puzzle to one of the 10 that we need
 		
@@ -72,6 +84,20 @@ public class JavaFXTemplate extends Application {
 		t.start();
 
 	}
+	// we need to have either another function to intialize the values in the buttons or do with a parameter on newPuzzle()
+	void newPuzzle(GridPane gridPane) {
+		int counter = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				Tiles t = new Tiles(i,j, counter); // zero should be the number of that puzzle tile
+				t.setMinSize(100, 100);
+				t.setOnAction(checkPosition);
+				puzzle[i][j] = t;
+				gridPane.add(puzzle[i][j], j, i);
+				counter++;
+			}
+		}
+	}
 	
 	public void setMenuOptions () {
 		menuGamePlay = new Menu( "Game Play");
@@ -88,15 +114,34 @@ public class JavaFXTemplate extends Application {
 		menuBar = new MenuBar();
 		setMenuOptions();
 		gridpane = new GridPane();
-		
-		
+		newPuzzle(gridpane);
+		gridpane.setHgap(2);
+		gridpane.setVgap(2);
 		puzzlePane = new BorderPane();
-		puzzlePane.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 		puzzlePane.setTop(menuBar);
 		
+		howToPlay = new Label("");
+		howToPlay.setFont(new Font("Arial",18));
+		
+		moveString = new Label();
+		moveString.setFont(new Font("Arial",18));
+		moveString.setText("Move #: ");
+		moveNumber = new Label();
+		moveNumber.setFont(new Font("Arial",18));
+		moveNumber.setText(String.valueOf(numberOfMoves));
+		
+		
 		gridpane.setAlignment(Pos.CENTER);
+		HBox hB = new HBox(moveString, moveNumber);
+		hB.setAlignment(Pos.CENTER);
 		
+		VBox vB = new VBox(hB, gridpane);
 		
+		vB.setAlignment(Pos.CENTER);
+		
+		puzzlePane.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		
+		puzzlePane.setCenter(vB);
 		
 		return new Scene(puzzlePane, 800, 800);
 	}
