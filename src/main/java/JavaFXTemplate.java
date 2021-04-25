@@ -28,6 +28,7 @@ public class JavaFXTemplate extends Application {
 	Button enter;
 	Label howToPlay, moveString, moveNumber;
 	int numberOfMoves = 0;
+	int moveDirection = 0;
 	TextField userInput;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -51,7 +52,52 @@ public class JavaFXTemplate extends Application {
 				Tiles tile = (Tiles)event.getSource();
 				int row = tile.getRow();
 				int column = tile.getColumn();
+				int num = tile.getNumber();
 				
+				
+				//check if the blank tile is one of the neighbors
+				int rowBlank = tile.getRowBlank();
+				int columnBlank = tile.getColumnBlank();
+				System.out.println("Blank tile at (" + rowBlank + ", " + columnBlank + ")");
+				System.out.println("Selected tile at (" + row + ", " + column + ")");
+				if (row == rowBlank ) { // means the clicked tile and blank tile are in the same row\
+					System.out.println("Same row");
+					if (column > columnBlank && (column+1 == columnBlank || column-1 == columnBlank)) {
+						moveDirection = -1; // move selected row down
+					} else if (column < columnBlank && (column+1 == columnBlank || column-1 == columnBlank)) {
+						moveDirection = 1; // move selected row up
+					} else {
+						moveDirection = 0;
+					}
+					System.out.println("Moving: " + moveDirection);
+				} else if (column == columnBlank) {
+					System.out.println("Same column");
+					if (row > rowBlank && (row+1 == rowBlank || row-1 == rowBlank)) {
+						moveDirection = -1; // move selected row down
+					} else if (row < rowBlank && (row+1 == rowBlank || row-1 == rowBlank)) {
+						moveDirection = 1; // move selected row up
+					} else {
+						moveDirection = 0;
+					}
+					System.out.println("Moving: " + moveDirection);
+				} else {
+					moveDirection = 0;
+				}
+				
+				
+				if (moveDirection != 0 ) {
+					numberOfMoves++;
+					moveNumber.setText(String.valueOf(numberOfMoves));
+					if (moveDirection == 1) {
+						puzzle[row][column].setEmptyTile(); // set's to empty
+						puzzle[row][column].setText("");
+						puzzle[rowBlank][columnBlank].updateTile(num);
+					} else if (moveDirection == -1) { // -1 move direction
+						puzzle[row][column].setEmptyTile(); // set's to empty
+						puzzle[row][column].setText("");
+						puzzle[rowBlank][columnBlank].updateTile(num); // change the empty to selected one
+					}
+				}
 				
 			}
 
@@ -97,6 +143,7 @@ public class JavaFXTemplate extends Application {
 				counter++;
 			}
 		}
+		
 	}
 	
 	public void setMenuOptions () {
