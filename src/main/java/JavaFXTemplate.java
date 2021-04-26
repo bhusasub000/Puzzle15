@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -16,9 +19,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class JavaFXTemplate extends Application {
+	
     Tiles[][] puzzle = new Tiles[4][4];
+
+    // holding all valid puzzle config
     ArrayList<int[][]> puzzleList;
     int[][] selectedPuzzle;
+    // keeps track of moves and gets sent to algo
+    int[][] puzzleCopy;
+    
 	EventHandler<ActionEvent> checkPosition; // to know the which tile was clicked
 	PauseTransition pause = new PauseTransition(Duration.seconds(4)); // later on for when AI solves, but we need pauses in between
 	PauseTransition howToPlayPause = new PauseTransition(Duration.seconds(15));
@@ -84,6 +93,9 @@ public class JavaFXTemplate extends Application {
 					puzzle[row][column].setEmptyTile(); // set's to empty
 					puzzle[row][column].setText("");
 					puzzle[rowBlank][columnBlank].updateTile(num);
+					// update the puzzleCopy
+					puzzleCopy[row][column] = 0;
+					puzzleCopy[rowBlank][columnBlank] = num;
 				}
 				if (isWinner()) {
 					System.out.println("YOU WIN");
@@ -126,8 +138,26 @@ public class JavaFXTemplate extends Application {
 			resetPuzzle();
 		});
 		
-		Thread t = new Thread(()-> {A_IDS_A_15solver ids = new A_IDS_A_15solver();});
-		t.start();
+		
+		
+		// first algo
+		solve1.setOnAction(e -> {
+			
+			ExecutorService ex = Executors.newFixedThreadPool(10);
+			Future<Integer> future = ex.submit(new myCall(puzzleCopy));
+
+			try {
+			Integer index = future.get();
+		    System.out.println("inside try" + index);
+			
+			}catch(Exception s){System.out.println(s.getMessage());}
+			});
+		
+//		ExecutorService ex = Executors.newFixedThreadPool(10);
+//		
+//		Thread t = new Thread(()-> {A_IDS_A_15solver ids = new A_IDS_A_15solver();});
+		
+		//t.start();
 
 	}
 	
@@ -148,6 +178,7 @@ public class JavaFXTemplate extends Application {
 	}
 	// multiple variations of the solveable puzzle
 	public void intializePuzzles() {
+		
 		int[][] puzzle1 = {{2, 6, 10, 3}, {1, 4, 7, 11}, {8, 5, 9, 15}, {12, 13, 14, 0}};
 		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
 	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
@@ -181,6 +212,12 @@ public class JavaFXTemplate extends Application {
 	// we need to have either another function to intialize the values in the buttons or do with a parameter on newPuzzle()
 	void newPuzzle(GridPane gridPane) {
 		selectedPuzzle = getPuzzle();
+		// populate the copy
+		puzzleCopy = new int[selectedPuzzle.length][];
+		for (int i = 0 ; i < selectedPuzzle.length; i++) {
+			puzzleCopy[i] = selectedPuzzle[i].clone();
+		}
+		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				Tiles t = new Tiles(i,j, selectedPuzzle[i][j]); // zero should be the number of that puzzle tile

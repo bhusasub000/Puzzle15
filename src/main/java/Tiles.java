@@ -3,10 +3,12 @@ public class Tiles extends Button {
 	private int row, column, number;
 	private static int rowBlank;
 	private static int columnBlank;
+	private boolean disabled;
 	
 	Tiles(int row, int column, int number) {
 		this.row = row;
 		this.column = column;
+		this.disabled = true;
 		this.number = number;
 		if (number != 0) {
 			this.setText(String.valueOf(this.number));
@@ -84,5 +86,8 @@ public class Tiles extends Button {
 		this.number = number;
 	}
 	
+	public void changeDisable(boolean x) {
+		this.disabled = x;
+	}
 	
 }
