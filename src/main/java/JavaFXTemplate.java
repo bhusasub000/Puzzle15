@@ -65,9 +65,11 @@ public class JavaFXTemplate extends Application {
 		solve2 = new MenuItem("Solve 2");
 		instr = new MenuItem("How To Play");
 		intializePuzzles();
+		
 		checkPosition = new EventHandler<ActionEvent>() {
 			
 			public void handle(ActionEvent event) {
+				resetPuzzle.setDisable(true);
 				Tiles tile = (Tiles)event.getSource();
 				int row = tile.getRow();
 				int column = tile.getColumn();
@@ -145,11 +147,17 @@ public class JavaFXTemplate extends Application {
 		});
 		
 		resetPuzzle.setOnAction(e -> {
-			resetPuzzle();
+			//resetPuzzle();
+			gridpane.setDisable(false);
+            gridpane.setOpacity(100);
+            resetPuzzle.setDisable(true);
 		});
 		
 		// animate moves on gridpane
 		showSolution.setOnAction(e -> {
+			resetPuzzle.setDisable(false);
+			gridpane.setDisable(true);
+            gridpane.setOpacity(100);
 			for (int i = 0; i < 10; i++) {
 				PauseTransition pause = new PauseTransition(Duration.seconds(i));
 				int arr[] = solution.get(i).getKey();
@@ -161,7 +169,9 @@ public class JavaFXTemplate extends Application {
 			//selectedPuzzle = oneToTwoArray(solution.get(9).getKey());
 			puzzleCopy = oneToTwoArray(solution.get(9).getKey());;
 			showSolution.setDisable(true);
+
 		});
+		
 		
 		// first algorithm 
 		solve1.setOnAction(e -> {
@@ -174,10 +184,8 @@ public class JavaFXTemplate extends Application {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					
 					Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
 					try {
-					
 						solution = new ArrayList<Node>();
 						ArrayList<Node> solutionPath = future.get();
 					
@@ -205,28 +213,22 @@ public class JavaFXTemplate extends Application {
 		
 		// first algorithm 
 		solve2.setOnAction(e -> {
-			
 			ExecutorService ex = Executors.newFixedThreadPool(10);
 			//Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
 			//Future <ArrayList<Node>>future = 
 			ex.execute(new Runnable(){
-
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					
 					Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 2));
 					try {
-					
 						solution = new ArrayList<Node>();
 						ArrayList<Node> solutionPath = future.get();
-					
 						// if a return is made the is done will be true we will use this to activate see solution button
 						System.out.println(future.isDone());
 						boolean size = checkSize(solutionPath);
 						System.out.println("This is the size: " + size);
 						solution = showTen (solutionPath, solution);
-						
 						if (future.isDone() && size) {
 							showSolution.setDisable(false);
 						} else {
@@ -234,15 +236,12 @@ public class JavaFXTemplate extends Application {
 							playAgain.setDisable(false);
 							exitPuzzle.setDisable(false);
 						}
-						
 						}catch(Exception s){System.out.println(s.getMessage());}
 						//});
 				}
 		
 			});
 		});
-		
-		
 		
 		playAgain.setOnAction(e -> {
 			resetPuzzle.setDisable(false);
@@ -252,16 +251,8 @@ public class JavaFXTemplate extends Application {
 		});
 		
 		exitPuzzle.setOnAction( e ->  {
-			
 			System.exit(1);
 		});
-		
-		
-////		ExecutorService ex = Executors.newFixedThreadPool(10);
-		
-//		Thread t = new Thread(()-> {A_IDS_A_15solver ids = new A_IDS_A_15solver();});
-//	
-//		t.start();
 
 	}
 	
@@ -297,7 +288,6 @@ public class JavaFXTemplate extends Application {
             {
                 if(count==d.length) break;
                 a[i][j]=d[count];
-                //System.out.printf("a[%d][%d]= %d\n",i,j,a[i][j]);
                 count++;
             }
         }
@@ -324,16 +314,16 @@ public class JavaFXTemplate extends Application {
 	public void intializePuzzles() {
 		
 		int[][] puzzle1 = {{2, 6, 10, 3}, {1, 4, 7, 11}, {8, 5, 9, 15}, {12, 13, 14, 0}};
-//		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
-//	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
-//		int[][] puzzle4 = {{1, 7, 11, 6}, {8, 13, 3, 15}, {12, 9, 0, 5}, {4, 10, 2, 14}}; // to check winning part
-//		int[][] puzzle5 = {{6, 13, 7, 10},{8, 9, 11, 0},{15, 2, 12, 5},{14, 3, 1, 4}};
-//	    int[][] puzzle6 = {{13, 2, 10, 3},{1, 12, 8, 4},{5, 0, 9, 6},{15, 14, 11, 7}};
-//	    int[][] puzzle7 = {{9, 2, 3, 4}, {0, 14, 8, 11}, {7, 10, 6, 12}, {15, 13, 1, 5}};
-//		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
-//	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
-//		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
-//	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
+		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
+	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
+		int[][] puzzle4 = {{1, 7, 11, 6}, {8, 13, 3, 15}, {12, 9, 0, 5}, {4, 10, 2, 14}}; // to check winning part
+		int[][] puzzle5 = {{6, 13, 7, 10},{8, 9, 11, 0},{15, 2, 12, 5},{14, 3, 1, 4}};
+	    int[][] puzzle6 = {{13, 2, 10, 3},{1, 12, 8, 4},{5, 0, 9, 6},{15, 14, 11, 7}};
+	    int[][] puzzle7 = {{9, 2, 3, 4}, {0, 14, 8, 11}, {7, 10, 6, 12}, {15, 13, 1, 5}};
+		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
+	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
+		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
+	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		puzzleList = new ArrayList<int[][]>();
 		puzzleList.add(puzzle1);
 //		puzzleList.add(puzzle2);
@@ -394,7 +384,6 @@ public class JavaFXTemplate extends Application {
 				puzzle[i][j].setDisable(true);
 			}
 		}
-		
 	}
 	// check is the puzzle is solved
 	boolean isWinner() {
@@ -443,14 +432,14 @@ public class JavaFXTemplate extends Application {
 		moveNumber.setFont(new Font("Arial",18));
 		moveNumber.setText(String.valueOf(numberOfMoves));
 		
-		resetPuzzle = new Button("Reset");
+		resetPuzzle = new Button("Continue");
 		showSolution = new Button("Show Solution");
 		showSolution.setDisable(true);
 		playAgain = new Button("Play Again");
 		exitPuzzle = new Button("Exit Game");
 		playAgain.setDisable(false);
 		exitPuzzle.setDisable(false);
-		
+		resetPuzzle.setDisable(true);
 		HBox end = new HBox(20, playAgain, exitPuzzle);
 		end.setAlignment(Pos.CENTER);
 		
