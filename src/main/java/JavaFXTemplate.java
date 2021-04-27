@@ -5,7 +5,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,6 +31,7 @@ public class JavaFXTemplate extends Application {
 
     // holding all valid puzzle config
     ArrayList<int[][]> puzzleList;
+    ArrayList<Node> solution;
     int[][] selectedPuzzle;
     // keeps track of moves and gets sent to algo
     int[][] puzzleCopy;
@@ -144,11 +149,17 @@ public class JavaFXTemplate extends Application {
 		// animate moves on gridpane
 		showSolution.setOnAction(e -> {
 			
-			
-			
-			
-			
-			
+			for (int i = 0; i < 10; i++) {
+				PauseTransition pause = new PauseTransition(Duration.seconds(i));
+				int arr[] = solution.get(i).getKey();
+				int[][] puz;
+				puz = oneToTwoArray(arr);
+				pause.setOnFinished((event) -> animatePuzzle(puz));
+				pause.play();
+			}
+			selectedPuzzle = oneToTwoArray(solution.get(9).getKey());
+			puzzleCopy = selectedPuzzle;
+			showSolution.setDisable(true);
 		});
 		
 		
@@ -168,7 +179,7 @@ public class JavaFXTemplate extends Application {
 
 			try {
 				
-			ArrayList<Node> solution = new ArrayList<Node>();
+			solution = new ArrayList<Node>();
 			ArrayList<Node> solutionPath = future.get();
 		
 			// if a return is made the is done will be true we will use this to activate see solution button
@@ -222,13 +233,29 @@ public class JavaFXTemplate extends Application {
 			return false;
 	}
 	public ArrayList<Node> showTen (ArrayList<Node> solutionPath, ArrayList<Node> solution) {
-		
+	
 		for (int i = 0 ; i < 10; i++) {
 			solution.add(solutionPath.get(i));
 		}
 		System.out.println(solution.size());
 		ids.printSolution(solution);
 		return solution;
+	}
+	
+	public int[][] oneToTwoArray(int[] d) {
+		int count=0;
+		int[][] a = new int[4][4];
+        for(int i=0;i<4;i++)
+        {
+        	for(int j=0;j<4;j++)
+            {
+                if(count==d.length) break;
+                a[i][j]=d[count];
+                //System.out.printf("a[%d][%d]= %d\n",i,j,a[i][j]);
+                count++;
+            }
+        }
+        return a;
 	}
 	
 	// for reset button
@@ -287,7 +314,6 @@ public class JavaFXTemplate extends Application {
 		for (int i = 0 ; i < selectedPuzzle.length; i++) {
 			puzzleCopy[i] = selectedPuzzle[i].clone();
 		}
-		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				Tiles t = new Tiles(i,j, selectedPuzzle[i][j]); // zero should be the number of that puzzle tile
@@ -297,7 +323,21 @@ public class JavaFXTemplate extends Application {
 				gridPane.add(puzzle[i][j], j, i);
 			}
 		}
-		
+	}
+	
+	void animatePuzzle(int[][] puz) {
+		numberOfMoves++;
+		moveNumber.setText(String.valueOf(numberOfMoves));
+		gridpane.getChildren().clear();
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				Tiles t = new Tiles(i,j, puz[i][j]); // zero should be the number of that puzzle tile
+				t.setMinSize(100, 100);
+				t.setOnAction(checkPosition);
+				puzzle[i][j] = t;
+				gridpane.add(puzzle[i][j], j, i);
+			}
+		}
 	}
 	
 	// after win, disable the puzzle so no moves can be made
