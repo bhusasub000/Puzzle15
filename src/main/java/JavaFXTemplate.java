@@ -108,6 +108,7 @@ public class JavaFXTemplate extends Application {
 				if (isWinner()) {
 					System.out.println("YOU WIN");
 					disablePuzzle();
+					resetPuzzle.setDisable(true);
 					puzzleList.remove(selectedPuzzle);
 				}
 			}
@@ -135,6 +136,7 @@ public class JavaFXTemplate extends Application {
 		});
 		
 		newPuzzle.setOnAction(e -> {
+			resetPuzzle.setDisable(false);
 			gridpane.getChildren().clear();
 			numberOfMoves = 0;
 			moveNumber.setText(String.valueOf(numberOfMoves));
@@ -218,6 +220,7 @@ public class JavaFXTemplate extends Application {
 				});
 		
 		playAgain.setOnAction(e -> {
+			resetPuzzle.setDisable(false);
 			resetPuzzle();
 			newPuzzle(gridpane);
 			
