@@ -182,6 +182,7 @@ public class JavaFXTemplate extends Application {
 			if (future.isDone() && size) {
 				showSolution.setDisable(false);
 			} else {
+				disablePuzzle();
 				playAgain.setDisable(false);
 				exitPuzzle.setDisable(false);
 			}
@@ -207,6 +208,7 @@ public class JavaFXTemplate extends Application {
 				if (future.isDone() && size) {
 					showSolution.setDisable(false);
 				} else {
+					disablePuzzle();
 					playAgain.setDisable(false);
 					exitPuzzle.setDisable(false);
 				}
@@ -243,8 +245,14 @@ public class JavaFXTemplate extends Application {
 			return false;
 	}
 	public ArrayList<Node> showTen (ArrayList<Node> solutionPath, ArrayList<Node> solution) {
-		for (int i = 0 ; i < 10; i++) {
-			solution.add(solutionPath.get(i));
+		if (checkSize(solutionPath)) {
+			for (int i = 0 ; i < 10; i++) {
+				solution.add(solutionPath.get(i));
+			}
+		} else {
+			for (int i = 0 ; i < solutionPath.size(); i++) {
+				solution.add(solutionPath.get(i));
+			}
 		}
 		System.out.println(solution.size());
 		ids.printSolution(solution);
@@ -296,19 +304,19 @@ public class JavaFXTemplate extends Application {
 		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
 	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
 		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
-	    
+	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		puzzleList = new ArrayList<int[][]>();
-		puzzleList.add(puzzle1);
-		puzzleList.add(puzzle2);
-		puzzleList.add(puzzle3);
-		puzzleList.add(puzzle4);
-		puzzleList.add(puzzle5);
-		puzzleList.add(puzzle6);
-		puzzleList.add(puzzle7);
-		puzzleList.add(puzzle8);
-		puzzleList.add(puzzle9);
-		puzzleList.add(puzzle10);
-		
+//		puzzleList.add(puzzle1);
+//		puzzleList.add(puzzle2);
+//		puzzleList.add(puzzle3);
+//		puzzleList.add(puzzle4);
+//		puzzleList.add(puzzle5);
+//		puzzleList.add(puzzle6);
+//		puzzleList.add(puzzle7);
+//		puzzleList.add(puzzle8);
+//		puzzleList.add(puzzle9);
+//		puzzleList.add(puzzle10);
+		puzzleList.add(puzzle11);
 	}
 	
 	// choose one random puzzle variation to solve
@@ -423,7 +431,7 @@ public class JavaFXTemplate extends Application {
 		HBox hB = new HBox(moveString, moveNumber);
 		hB.setAlignment(Pos.CENTER);
 		
-		VBox vB = new VBox(20, hB, b, gridpane);
+		VBox vB = new VBox(20, hB, b, gridpane, end);
 		
 		vB.setAlignment(Pos.CENTER);
 		
