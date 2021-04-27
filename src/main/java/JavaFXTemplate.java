@@ -165,57 +165,82 @@ public class JavaFXTemplate extends Application {
 		solve1.setOnAction(e -> {
 			
 			ExecutorService ex = Executors.newFixedThreadPool(10);
-			Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
+			//Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
+			//Future <ArrayList<Node>>future = 
+			ex.execute(new Runnable(){
 
-
-			try {
-				
-			solution = new ArrayList<Node>();
-			ArrayList<Node> solutionPath = future.get();
-		
-			// if a return is made the is done will be true we will use this to activate see solution button
-			System.out.println(future.isDone());
-			boolean size = checkSize(solutionPath);
-			System.out.println("This is the size: " + size);
-			solution = showTen (solutionPath, solution);
-			
-			if (future.isDone() && size) {
-				showSolution.setDisable(false);
-			} else {
-				disablePuzzle();
-				playAgain.setDisable(false);
-				exitPuzzle.setDisable(false);
-			}
-			
-			}catch(Exception s){System.out.println(s.getMessage());}
-			
-			});
-		
-		// second algorithm
-		solve2.setOnAction(e -> {
-			ExecutorService ex = Executors.newFixedThreadPool(10);
-			Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 2));
-			try {
-				solution = new ArrayList<Node>();
-				ArrayList<Node> solutionPath = future.get();
-			
-				// if a return is made the is done will be true we will use this to activate see solution button
-				System.out.println(future.isDone());
-				boolean size = checkSize(solutionPath);
-				System.out.println("This is the size: " + size);
-				solution = showTen (solutionPath, solution);
-				
-				if (future.isDone() && size) {
-					showSolution.setDisable(false);
-				} else {
-					disablePuzzle();
-					playAgain.setDisable(false);
-					exitPuzzle.setDisable(false);
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					
+					Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
+					try {
+					
+						solution = new ArrayList<Node>();
+						ArrayList<Node> solutionPath = future.get();
+					
+						// if a return is made the is done will be true we will use this to activate see solution button
+						System.out.println(future.isDone());
+						boolean size = checkSize(solutionPath);
+						System.out.println("This is the size: " + size);
+						solution = showTen (solutionPath, solution);
+						
+						if (future.isDone() && size) {
+							showSolution.setDisable(false);
+						} else {
+							disablePuzzle();
+							playAgain.setDisable(false);
+							exitPuzzle.setDisable(false);
+						}
+						
+						}catch(Exception s){System.out.println(s.getMessage());}
+						//});
 				}
-				
-				}catch(Exception s){System.out.println(s.getMessage());}
-				
-				});
+		
+			});
+		});
+
+		
+		// first algorithm 
+		solve2.setOnAction(e -> {
+			
+			ExecutorService ex = Executors.newFixedThreadPool(10);
+			//Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 1));
+			//Future <ArrayList<Node>>future = 
+			ex.execute(new Runnable(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					
+					Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 2));
+					try {
+					
+						solution = new ArrayList<Node>();
+						ArrayList<Node> solutionPath = future.get();
+					
+						// if a return is made the is done will be true we will use this to activate see solution button
+						System.out.println(future.isDone());
+						boolean size = checkSize(solutionPath);
+						System.out.println("This is the size: " + size);
+						solution = showTen (solutionPath, solution);
+						
+						if (future.isDone() && size) {
+							showSolution.setDisable(false);
+						} else {
+							disablePuzzle();
+							playAgain.setDisable(false);
+							exitPuzzle.setDisable(false);
+						}
+						
+						}catch(Exception s){System.out.println(s.getMessage());}
+						//});
+				}
+		
+			});
+		});
+		
+		
 		
 		playAgain.setOnAction(e -> {
 			resetPuzzle();
@@ -227,6 +252,7 @@ public class JavaFXTemplate extends Application {
 			
 			System.exit(1);
 		});
+		
 		
 ////		ExecutorService ex = Executors.newFixedThreadPool(10);
 		
@@ -295,18 +321,18 @@ public class JavaFXTemplate extends Application {
 	public void intializePuzzles() {
 		
 		int[][] puzzle1 = {{2, 6, 10, 3}, {1, 4, 7, 11}, {8, 5, 9, 15}, {12, 13, 14, 0}};
-		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
-	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
-		int[][] puzzle4 = {{1, 7, 11, 6}, {8, 13, 3, 15}, {12, 9, 0, 5}, {4, 10, 2, 14}}; // to check winning part
-		int[][] puzzle5 = {{6, 13, 7, 10},{8, 9, 11, 0},{15, 2, 12, 5},{14, 3, 1, 4}};
-	    int[][] puzzle6 = {{13, 2, 10, 3},{1, 12, 8, 4},{5, 0, 9, 6},{15, 14, 11, 7}};
-	    int[][] puzzle7 = {{9, 2, 3, 4}, {0, 14, 8, 11}, {7, 10, 6, 12}, {15, 13, 1, 5}};
-		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
-	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
-		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
-	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
+//		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
+//	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
+//		int[][] puzzle4 = {{1, 7, 11, 6}, {8, 13, 3, 15}, {12, 9, 0, 5}, {4, 10, 2, 14}}; // to check winning part
+//		int[][] puzzle5 = {{6, 13, 7, 10},{8, 9, 11, 0},{15, 2, 12, 5},{14, 3, 1, 4}};
+//	    int[][] puzzle6 = {{13, 2, 10, 3},{1, 12, 8, 4},{5, 0, 9, 6},{15, 14, 11, 7}};
+//	    int[][] puzzle7 = {{9, 2, 3, 4}, {0, 14, 8, 11}, {7, 10, 6, 12}, {15, 13, 1, 5}};
+//		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
+//	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
+//		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
+//	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		puzzleList = new ArrayList<int[][]>();
-//		puzzleList.add(puzzle1);
+		puzzleList.add(puzzle1);
 //		puzzleList.add(puzzle2);
 //		puzzleList.add(puzzle3);
 //		puzzleList.add(puzzle4);
@@ -316,7 +342,7 @@ public class JavaFXTemplate extends Application {
 //		puzzleList.add(puzzle8);
 //		puzzleList.add(puzzle9);
 //		puzzleList.add(puzzle10);
-		puzzleList.add(puzzle11);
+//		puzzleList.add(puzzle11);
 	}
 	
 	// choose one random puzzle variation to solve
