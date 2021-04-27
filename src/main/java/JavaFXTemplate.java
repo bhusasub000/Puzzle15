@@ -173,13 +173,11 @@ public class JavaFXTemplate extends Application {
 		
 			// if a return is made the is done will be true we will use this to activate see solution button
 			System.out.println(future.isDone());
-			
 			boolean size = checkSize(solutionPath);
 			System.out.println("This is the size: " + size);
 			solution = showTen (solutionPath, solution);
 			
 			if (future.isDone() && size) {
-				
 				showSolution.setDisable(false);
 			} else {
 				
