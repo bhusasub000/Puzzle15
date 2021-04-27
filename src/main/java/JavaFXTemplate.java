@@ -213,6 +213,16 @@ public class JavaFXTemplate extends Application {
 				
 				});
 		
+		playAgain.setOnAction(e -> {
+			resetPuzzle();
+			newPuzzle(gridpane);
+			
+		});
+		
+		exitPuzzle.setOnAction( e ->  {
+			
+			System.exit(1);
+		});
 		
 ////		ExecutorService ex = Executors.newFixedThreadPool(10);
 		
@@ -397,6 +407,13 @@ public class JavaFXTemplate extends Application {
 		resetPuzzle = new Button("Reset");
 		showSolution = new Button("Show Solution");
 		showSolution.setDisable(true);
+		playAgain = new Button("Play Again");
+		exitPuzzle = new Button("Exit Game");
+		playAgain.setDisable(false);
+		exitPuzzle.setDisable(false);
+		
+		HBox end = new HBox(20, playAgain, exitPuzzle);
+		end.setAlignment(Pos.CENTER);
 		
 		HBox b = new HBox (100, resetPuzzle, showSolution);
 		b.setAlignment(Pos.CENTER);
