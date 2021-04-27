@@ -8,30 +8,30 @@ public class A_IDS_A_15solver {
 	 */
 	
 	
-	ArrayList<Node> solutionPath;
+	//ArrayList<Node> solutionPath;
 	
 	
-public A_IDS_A_15solver(){
-		
-		UserInterface puzzle = new UserInterface();			//class for reading in puzzle from user
-		
-		Node startState = new Node(puzzle.getPuzzle());		//node contains the start state of puzzle
-		
-		startState.setDepth(0);
-				
-		System.out.println("\nStarting A* Search with heuristic #1....This may take a while\n\n");
-		
-		A_Star(startState, "heuristicOne");							//A* search with heuristic 1 (misplaced tiles)
-		
-		System.out.println("\nStarting A* Search with heuristic #2....This may take a while\n\n");
-		
-		//A_Star(startState, "heuristicTwo");							//A* search with heuristic 2 (manhattan)
-		
-		
-		System.out.println("\nThanks for using me to solve your 15 puzzle......Goodbye");
-		System.exit(1);
-		
-	}
+//public A_IDS_A_15solver(){
+//		
+//		UserInterface puzzle = new UserInterface();			//class for reading in puzzle from user
+//		
+//		Node startState = new Node(puzzle.getPuzzle());		//node contains the start state of puzzle
+//		
+//		startState.setDepth(0);
+//				
+//		System.out.println("\nStarting A* Search with heuristic #1....This may take a while\n\n");
+//		
+//		A_Star(startState, "heuristicOne");							//A* search with heuristic 1 (misplaced tiles)
+//		
+//		System.out.println("\nStarting A* Search with heuristic #2....This may take a while\n\n");
+//		
+//		A_Star(startState, "heuristicTwo");							//A* search with heuristic 2 (manhattan)
+//		
+//		
+//		System.out.println("\nThanks for using me to solve your 15 puzzle......Goodbye");
+//		System.exit(1);
+//		
+//	}
 
 /**
  * Method takes node with the start state as well as which heuristic to use and initializes a DB_Solver2 object(A* search).
@@ -41,14 +41,15 @@ public A_IDS_A_15solver(){
  */
 	public ArrayList<Node> A_Star(Node startState, String heuristic){
 		
-				
+
+		ArrayList<Node> solutionPath = null;
 		DB_Solver2 start_A_Star = new DB_Solver2(startState, heuristic);	//DB_Solver class initialized with startState node
 		
-				
+		
 		Long start = System.currentTimeMillis();
 
 		Node solution = start_A_Star.findSolutionPath();	//returns the node that contains the solved puzzle
-		
+
 		Long end = System.currentTimeMillis();
 
 		System.out.println("\n******Run Time for A* "+ heuristic + " is: "+ (end-start) + " milliseconds**********");
@@ -60,14 +61,13 @@ public A_IDS_A_15solver(){
 		else											//found a solution so, get the path and print it
 		{
 		solutionPath = start_A_Star.getSolutionPath(solution);	//creates ArrayList of solution path
-			
-			printSolution(solutionPath);
-			return solutionPath;
+		
+			//printSolution(solutionPath);
+	
 			//System.out.println("\n$$$$$$$$$$$$$$ the solution path is "+ solutionPath.size()+ " moves long\n");
 		}
+
 		return solutionPath;
-		
-		
 	}
 	
 	
