@@ -148,7 +148,6 @@ public class JavaFXTemplate extends Application {
 		
 		// animate moves on gridpane
 		showSolution.setOnAction(e -> {
-			
 			for (int i = 0; i < 10; i++) {
 				PauseTransition pause = new PauseTransition(Duration.seconds(i));
 				int arr[] = solution.get(i).getKey();
@@ -157,18 +156,10 @@ public class JavaFXTemplate extends Application {
 				pause.setOnFinished((event) -> animatePuzzle(puz));
 				pause.play();
 			}
-			selectedPuzzle = oneToTwoArray(solution.get(9).getKey());
-			puzzleCopy = selectedPuzzle;
+			//selectedPuzzle = oneToTwoArray(solution.get(9).getKey());
+			puzzleCopy = oneToTwoArray(solution.get(9).getKey());;
 			showSolution.setDisable(true);
 		});
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		// first algorithm 
 		solve1.setOnAction(e -> {
@@ -200,20 +191,27 @@ public class JavaFXTemplate extends Application {
 		
 		// second algorithm
 		solve2.setOnAction(e -> {
-			
 			ExecutorService ex = Executors.newFixedThreadPool(10);
 			Future <ArrayList<Node>>future = ex.submit(new myCall(puzzleCopy, 2));
-
-			
-				
 			try {
-				
-				
-			ArrayList<Node> solutionPath = future.get();
+				solution = new ArrayList<Node>();
+				ArrayList<Node> solutionPath = future.get();
 			
-			}catch(Exception s){System.out.println(s.getMessage());}
-			
-			});
+				// if a return is made the is done will be true we will use this to activate see solution button
+				System.out.println(future.isDone());
+				boolean size = checkSize(solutionPath);
+				System.out.println("This is the size: " + size);
+				solution = showTen (solutionPath, solution);
+				
+				if (future.isDone() && size) {
+					showSolution.setDisable(false);
+				} else {
+					
+				}
+				
+				}catch(Exception s){System.out.println(s.getMessage());}
+				
+				});
 		
 		
 ////		ExecutorService ex = Executors.newFixedThreadPool(10);
@@ -233,7 +231,6 @@ public class JavaFXTemplate extends Application {
 			return false;
 	}
 	public ArrayList<Node> showTen (ArrayList<Node> solutionPath, ArrayList<Node> solution) {
-	
 		for (int i = 0 ; i < 10; i++) {
 			solution.add(solutionPath.get(i));
 		}
@@ -272,6 +269,7 @@ public class JavaFXTemplate extends Application {
 				gridpane.add(puzzle[i][j], j, i);
 			}
 		}
+		puzzleCopy = selectedPuzzle;
 	}
 	// multiple variations of the solveable puzzle
 	public void intializePuzzles() {
