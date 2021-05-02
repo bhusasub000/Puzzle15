@@ -45,7 +45,7 @@ public class JavaFXTemplate extends Application {
 	Menu menuGamePlay, menuOptions, howTo;
 	MenuItem exit, newPuzzle, solve1, solve2, instr;
 	Button showSolution, resetPuzzle, playAgain, exitPuzzle;
-	Label howToPlay, moveString, moveNumber;
+	Label howToPlay, moveString, moveNumber, gameResult;
 	int numberOfMoves = 0;
 	int moveDirection = 0;
 	
@@ -109,9 +109,12 @@ public class JavaFXTemplate extends Application {
 				}
 				if (isWinner()) {
 					System.out.println("YOU WIN");
+					gameResult.setVisible(true);
 					disablePuzzle();
+					playAgain.setDisable(false);
+					exitPuzzle.setDisable(false);
 					resetPuzzle.setDisable(true);
-					puzzleList.remove(selectedPuzzle);
+					//puzzleList.remove(selectedPuzzle);
 				}
 			}
 		};
@@ -138,16 +141,15 @@ public class JavaFXTemplate extends Application {
 		});
 		
 		newPuzzle.setOnAction(e -> {
-			resetPuzzle.setDisable(false);
 			gridpane.getChildren().clear();
 			numberOfMoves = 0;
 			moveNumber.setText(String.valueOf(numberOfMoves));
-			puzzleList.remove(selectedPuzzle);
+			if (puzzleList.size() > 1)
+                puzzleList.remove(selectedPuzzle);
 			newPuzzle(gridpane);
 		});
 		
 		resetPuzzle.setOnAction(e -> {
-			//resetPuzzle();
 			gridpane.setDisable(false);
             gridpane.setOpacity(100);
             resetPuzzle.setDisable(true);
@@ -155,16 +157,20 @@ public class JavaFXTemplate extends Application {
 		
 		// animate moves on gridpane
 		showSolution.setOnAction(e -> {
+			
 			resetPuzzle.setDisable(false);
 			gridpane.setDisable(true);
             gridpane.setOpacity(100);
+            
 			for (int i = 0; i < 10; i++) {
 				PauseTransition pause = new PauseTransition(Duration.seconds(i));
 				int arr[] = solution.get(i).getKey();
 				int[][] puz;
 				puz = oneToTwoArray(arr);
+				
 				pause.setOnFinished((event) -> animatePuzzle(puz));
 				pause.play();
+		
 			}
 			//selectedPuzzle = oneToTwoArray(solution.get(9).getKey());
 			puzzleCopy = oneToTwoArray(solution.get(9).getKey());;
@@ -244,7 +250,6 @@ public class JavaFXTemplate extends Application {
 		});
 		
 		playAgain.setOnAction(e -> {
-			resetPuzzle.setDisable(false);
 			resetPuzzle();
 			newPuzzle(gridpane);
 			
@@ -296,6 +301,7 @@ public class JavaFXTemplate extends Application {
 	
 	// for reset button
 	private void resetPuzzle() {
+		gameResult.setVisible(false);
 		gridpane.getChildren().clear();
 		numberOfMoves = 0;
 		moveNumber.setText(String.valueOf(numberOfMoves));
@@ -314,28 +320,28 @@ public class JavaFXTemplate extends Application {
 	public void intializePuzzles() {
 		
 		int[][] puzzle1 = {{2, 6, 10, 3}, {1, 4, 7, 11}, {8, 5, 9, 15}, {12, 13, 14, 0}};
-		int[][] puzzle2 = {{0, 14, 13, 12}, {15, 9, 5, 8}, {11, 7, 4, 1}, {3, 10, 6, 2}};
-	    int[][] puzzle3 = {{12, 1, 10, 2}, {7, 11, 4, 14}, {5, 0, 9, 15}, {8, 13, 6, 3}};
-		int[][] puzzle4 = {{1, 7, 11, 6}, {8, 13, 3, 15}, {12, 9, 0, 5}, {4, 10, 2, 14}}; // to check winning part
-		int[][] puzzle5 = {{6, 13, 7, 10},{8, 9, 11, 0},{15, 2, 12, 5},{14, 3, 1, 4}};
-	    int[][] puzzle6 = {{13, 2, 10, 3},{1, 12, 8, 4},{5, 0, 9, 6},{15, 14, 11, 7}};
-	    int[][] puzzle7 = {{9, 2, 3, 4}, {0, 14, 8, 11}, {7, 10, 6, 12}, {15, 13, 1, 5}};
-		int[][] puzzle8 = {{6, 11, 8, 2}, {1, 3, 4, 12}, {14, 13, 0, 15}, {10, 5, 7, 9}};
-	    int[][] puzzle9 = {{2, 14, 3, 4}, {0, 1, 7, 6}, {11, 13, 8, 12}, {5, 10, 9, 15}};
-		int[][] puzzle10 = {{0, 5, 1, 4}, {9, 3, 12, 8}, {14, 13, 6, 7}, {11, 10, 2, 15}};
+		int[][] puzzle2 = {{5, 13, 9, 2}, {10, 1, 15, 8}, {14,7,12,6}, {0,4,3,11}};
+	    int[][] puzzle3 = {{13,0,6,9}, {15,8,3,4}, {10,5,7,2}, {14,1,12,11}};
+		int[][] puzzle4 = {{15,13,6,14}, {2,12,5,4}, {7,8,11,0}, {1,3,10,9}}; 
+		int[][] puzzle5 = {{14,12,1,3},{0,5,15,7},{13,8,11,4},{2,6,9,10}};
+	    int[][] puzzle6 = {{9,1,15,0},{7,3,5,10},{11,8,13,6},{12,14,4,2}};
+	    int[][] puzzle7 = {{10,8,3,12}, {9,4,7,14}, {11,0,15,6}, {2,13,5,1}};
+		int[][] puzzle8 = {{15,8,14,11}, {3,10,4,2}, {12,9,0,1}, {6,7,13,5}};
+	    int[][] puzzle9 = {{3,6,15,9}, {4,11,14,5}, {2,10,1,7}, {12,0,8,13}};
+		int[][] puzzle10 = {{0,7,11,9}, {2,14,5,6}, {3,13,12,1}, {15,8,4,10}};
 	    int[][] puzzle11 = {{1, 0, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		puzzleList = new ArrayList<int[][]>();
 		puzzleList.add(puzzle1);
-//		puzzleList.add(puzzle2);
-//		puzzleList.add(puzzle3);
-//		puzzleList.add(puzzle4);
-//		puzzleList.add(puzzle5);
-//		puzzleList.add(puzzle6);
-//		puzzleList.add(puzzle7);
-//		puzzleList.add(puzzle8);
-//		puzzleList.add(puzzle9);
-//		puzzleList.add(puzzle10);
-//		puzzleList.add(puzzle11);
+		puzzleList.add(puzzle2);
+		puzzleList.add(puzzle3);
+		puzzleList.add(puzzle4);
+		puzzleList.add(puzzle5);
+		puzzleList.add(puzzle6);
+		puzzleList.add(puzzle7);
+		puzzleList.add(puzzle8);
+		puzzleList.add(puzzle9);
+		puzzleList.add(puzzle10);
+		puzzleList.add(puzzle11);
 	}
 	
 	// choose one random puzzle variation to solve
@@ -393,6 +399,7 @@ public class JavaFXTemplate extends Application {
 				if ( puzzle[i][j].getNumber() != counter) {
 					return false;
 				}
+				
 				counter++;
 			}
 		}
@@ -425,6 +432,11 @@ public class JavaFXTemplate extends Application {
 		VBox borderTop = new VBox(menuBar, howToPlay);
 		puzzlePane.setTop(borderTop);
 		
+		gameResult = new Label();
+		gameResult.setText("You WIN!");
+		gameResult.setFont(new Font("Arial",28));
+		gameResult.setVisible(false);
+		
 		moveString = new Label();
 		moveString.setFont(new Font("Arial",18));
 		moveString.setText("Move #: ");
@@ -435,10 +447,11 @@ public class JavaFXTemplate extends Application {
 		resetPuzzle = new Button("Continue");
 		showSolution = new Button("Show Solution");
 		showSolution.setDisable(true);
+		
 		playAgain = new Button("Play Again");
 		exitPuzzle = new Button("Exit Game");
-		playAgain.setDisable(false);
-		exitPuzzle.setDisable(false);
+		playAgain.setDisable(true);
+		exitPuzzle.setDisable(true);
 		resetPuzzle.setDisable(true);
 		HBox end = new HBox(20, playAgain, exitPuzzle);
 		end.setAlignment(Pos.CENTER);
@@ -449,7 +462,7 @@ public class JavaFXTemplate extends Application {
 		HBox hB = new HBox(moveString, moveNumber);
 		hB.setAlignment(Pos.CENTER);
 		
-		VBox vB = new VBox(20, hB, b, gridpane, end);
+		VBox vB = new VBox(20,gameResult, hB, b, gridpane, end);
 		
 		vB.setAlignment(Pos.CENTER);
 		
